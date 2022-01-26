@@ -17,6 +17,8 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
               - matchExpressions:
+                  # This is telling the scheduller where NOT TO SCHEDULE the pods, regarding the nodes.
+                  # Here, we`re setting it to NOT BE SCHEDULED to a "master" node.`
                   - key: node-role.kubernetes.io/master
                     operator: NotIn
                     values: ["true"]
@@ -24,11 +26,15 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
                 matchExpressions:
+                  #this is "repelling" the pods from each other.
                   - key: app
                     operator: In
                     values: [myapp]
+              #this is to schedule one pod per zone.
               topologyKey: kubernetes.io/hostname #DEPRECATED BUT USED HERE SINCE K3D USES IT YET.
-              # topologyKey: topology.kubernetes.io/zone #This is the new label to be used. I have set this labels to the nodes, so I`ll leave it here as an option`
+              # topologyKey: topology.kubernetes.io/zone
+              # "kubernetes.io/hostname" is the new label to be used.
+              # I have set these labels to the nodes, so I`ll leave it here as an option.
       containers:
         - name: myapp
           image: docker.io/roggoncalves/rotationalapp
