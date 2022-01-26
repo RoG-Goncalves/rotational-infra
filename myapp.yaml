@@ -33,7 +33,7 @@ spec:
               #this is to schedule one pod per zone.
               topologyKey: kubernetes.io/hostname #DEPRECATED BUT USED HERE SINCE K3D USES IT YET.
               # topologyKey: topology.kubernetes.io/zone
-              # "kubernetes.io/hostname" is the new label to be used.
+              # "topology.kubernetes.io/zone" is the new label to be used.
               # I have set these labels to the nodes, so I`ll leave it here as an option.
       containers:
         - name: myapp
