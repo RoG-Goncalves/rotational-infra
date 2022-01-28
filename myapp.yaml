@@ -6,7 +6,7 @@ spec:
   selector:
     matchLabels:
       app: myapp
-  replicas: 5
+  replicas: 2
   template:
     metadata:
       labels:
@@ -34,10 +34,9 @@ spec:
               topologyKey: kubernetes.io/hostname #DEPRECATED BUT USED HERE SINCE K3D USES IT YET.
               # topologyKey: topology.kubernetes.io/zone
               # "topology.kubernetes.io/zone" is the new label to be used.
-              # I have set these labels to the nodes, so I`ll leave it here as an option.
       containers:
         - name: myapp
-          image: docker.io/roggoncalves/rotationalapp
+          image: docker.io/roggoncalves/rotationalappnode:v1.0
           resources:
             requests:
               memory: "64Mi"
@@ -47,3 +46,13 @@ spec:
               cpu: "500m"
           ports:
             - containerPort: 80
+          lifecycle:
+            preStop:
+              exec:
+                command: ["kill", "1"]
+      terminationGracePeriodSeconds: 1800
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
